@@ -1,0 +1,21 @@
+{
+  "_comment": "Types are: XP, MONEY, MOBCOIN, FISHING, MINE",
+  "_comment2": "Material can be a string of the material or material id for instance: 160/14 -> red glass pane",
+  "_comment3": "Time is in milliseconds. This will be translated to a readable time in strings/messages",
+    "SuperPowerfulDirtXP": {
+      "type": "XP",
+      "amplifier": 2.0,
+      "boostFaction": true,
+      "time": 5000,
+      "material": "DIRT",
+      "itemMeta": {
+        "glow": true,
+        "displayName": "XP Boost",
+        "lore": [
+          "Grants an xp boost for {time}",
+          "Amplifier: {amplifier}",
+          "Boosts faction: {boostFaction}"
+        ]
+      }
+  }
+}
