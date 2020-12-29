@@ -1,5 +1,6 @@
 package me.nanigans.pandorabooster.Events;
 
+import com.earth2me.essentials.Mob;
 import dev.minecraftplugins.pandora.pandoralake.listener.RewardEvent;
 import me.nanigans.pandorabooster.Booster;
 import me.nanigans.pandorabooster.BoosterEffects.*;
@@ -33,6 +34,22 @@ public class BoosterEvents implements Listener {
             final XP xp = XP.getXpBoost().get(player.getUniqueId());
             xp.getTimer().pause();
         }
+        if (Fishing.getFishBoosters().containsKey(player.getUniqueId())) {
+            final Fishing xp = Fishing.getFishBoosters().get(player.getUniqueId());
+            xp.getTimer().pause();
+        }
+        if (Mines.getMineBoosts().containsKey(player.getUniqueId())) {
+            final Mines xp = Mines.getMineBoosts().get(player.getUniqueId());
+            xp.getTimer().pause();
+        }
+        if (MobCoin.getMobCoinBoosters().containsKey(player.getUniqueId())) {
+            final MobCoin xp = MobCoin.getMobCoinBoosters().get(player.getUniqueId());
+            xp.getTimer().pause();
+        }
+        if (Money.getMoneyBoosts().containsKey(player.getUniqueId())) {
+            final Money xp = Money.getMoneyBoosts().get(player.getUniqueId());
+            xp.getTimer().pause();
+        }
     }
 
     @EventHandler
@@ -43,7 +60,22 @@ public class BoosterEvents implements Listener {
             final XP xp = XP.getXpBoost().get(player.getUniqueId());
             xp.getTimer().resume();
         }
-
+        if (Fishing.getFishBoosters().containsKey(player.getUniqueId())) {
+            final Fishing xp = Fishing.getFishBoosters().get(player.getUniqueId());
+            xp.getTimer().resume();
+        }
+        if (Mines.getMineBoosts().containsKey(player.getUniqueId())) {
+            final Mines xp = Mines.getMineBoosts().get(player.getUniqueId());
+            xp.getTimer().resume();
+        }
+        if (MobCoin.getMobCoinBoosters().containsKey(player.getUniqueId())) {
+            final MobCoin xp = MobCoin.getMobCoinBoosters().get(player.getUniqueId());
+            xp.getTimer().resume();
+        }
+        if (Money.getMoneyBoosts().containsKey(player.getUniqueId())) {
+            final Money xp = Money.getMoneyBoosts().get(player.getUniqueId());
+            xp.getTimer().resume();
+        }
     }
 
 
