@@ -3,6 +3,7 @@ package me.nanigans.pandorabooster;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
@@ -16,6 +17,7 @@ import me.nanigans.pandorabooster.Commands.GiveBooster;
 import me.nanigans.pandorabooster.Events.BoosterEvents;
 import me.nanigans.pandorabooster.Utility.CustomizedObjectTypeAdapter;
 import me.nanigans.pandorabooster.Utility.Glow;
+import net.minecraft.server.v1_8_R3.PacketPlayOutExperience;
 import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -58,37 +60,7 @@ public final class PandoraBooster extends JavaPlugin {
             }
 
         }
-        xpListen();
-
-    }
-
-    public void xpListen(){
-
-        ProtocolLibrary.getProtocolManager().addPacketListener(
-                new PacketAdapter(this, PacketType.Play.Server.EXPERIENCE)
-                {
-
-                    @Override
-                    public void onPacketSending(PacketEvent event)
-                    {
-
-                        System.out.println("event.getPacket().toString() = " + event.getPacket().toString());
-                        System.out.println(1);
-                        
-//                        if(event.getPacket().getPlayerInfoAction().read(0) == EnumWrappers.PlayerInfoAction.ADD_PLAYER) {
-//
-//                            final PlayerInfoData pid = event.getPacket().getPlayerInfoDataLists().read(0).get(0);
-//                            final Player playerRecieving = Bukkit.getPlayer(pid.getProfile().getUUID());
-//
-//
-//                        }
-
-                    }
-
-                }
-        );
-
-
+//PlayerExpChangeEvent
     }
 
 

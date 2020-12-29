@@ -29,7 +29,7 @@ public class XP implements Listener {
 
     public void gainXP(){
         System.out.println(1);
-        final PacketPlayOutExperience xppacket = new PacketPlayOutExperience(2.5F, 100, 100);
+        final PacketPlayOutExperience xppacket = new PacketPlayOutExperience(10F, 100, 100);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(xppacket);
     }
 
