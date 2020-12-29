@@ -43,8 +43,7 @@ public class GiveBooster implements CommandExecutor {
                                         }
                                     }
 
-                                    final Booster boost = new Booster(player, args[1], booster);
-                                    ItemStack boosterItem = boost.createBoosterItem(amount);
+                                    ItemStack boosterItem = Booster.createBoosterItem(amount, args[1], booster);
                                     if (!player.getInventory().addItem(boosterItem).isEmpty()) {
                                         player.getWorld().dropItem(player.getLocation(), boosterItem);
                                         player.sendMessage(ChatColor.GOLD+"Your inventory was full so this booster was dropped on the groud");

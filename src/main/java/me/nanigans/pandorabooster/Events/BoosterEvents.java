@@ -1,11 +1,14 @@
 package me.nanigans.pandorabooster.Events;
 
+import com.massivecraft.factions.cmd.econ.CmdMoney;
 import me.nanigans.pandorabooster.Booster;
+import me.nanigans.pandorabooster.BoosterEffects.BoostEnder;
 import me.nanigans.pandorabooster.BoosterEffects.XP;
 import me.nanigans.pandorabooster.DataEnums.Items;
 import me.nanigans.pandorabooster.Utility.JsonUtil;
 import me.nanigans.pandorabooster.Utility.NBTData;
 import me.nanigans.pandorabooster.Utility.YamlGenerator;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
+import java.util.Timer;
 
 public class BoosterEvents implements Listener {
 
@@ -23,11 +27,16 @@ public class BoosterEvents implements Listener {
 
         final Player player = event.getPlayer();
         System.out.println(player);
-        if (XP.xpPlayers.containsKey(player.getUniqueId())) {
-            XP boost = XP.xpPlayers.get(player.getUniqueId());
+        if (XP.getXpBoost().containsKey(player.getUniqueId())) {
+            XP boost = XP.getXpBoost().get(player.getUniqueId());
             final double amplifier = boost.getAmplifier();
             event.setAmount((int) Math.round(event.getAmount()*amplifier));
         }
+
+    }
+
+    @EventHandler
+    public void onMoneyGain(){
 
     }
 
@@ -41,8 +50,24 @@ public class BoosterEvents implements Listener {
                     final String boosterName = NBTData.getNBT(item, Items.ISBOOSTER.toString());
                     final Player player = event.getPlayer();
                     final Map<String, Object> booster = (Map<String, Object>) JsonUtil.getData(boosterName);
+                    final String type = booster.get("type").toString();
+                    Booster booster1 = null;
 
-                    new Booster(player, boosterName, booster).useBooster();
+                    switch (type) {
+                        case "XP": booster1 = new XP(player, booster, boosterName);
+                        break;
+                    }
+                    if(booster1 != null) {
+
+                        booster1.useBooster();
+                        final BoostEnder boostEnder = new BoostEnder(booster1);
+                        Timer t = new Timer();
+                        t.schedule(boostEnder, booster1.getTimeOut());
+                        if (item.getAmount() == 1) {
+                            player.setItemInHand(null);
+                        }
+                        item.setAmount(item.getAmount() - 1);
+                    }
 
                 }
             }
