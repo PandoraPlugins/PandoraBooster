@@ -22,6 +22,7 @@ public abstract class Booster {
     protected String name;
     protected long timeOut;
     protected double amp;
+    protected short chance;
 
     public Booster(Player player, String name, Map<String, Object> booster){
         this.player = player;
@@ -29,6 +30,7 @@ public abstract class Booster {
         this.name = name;
         this.timeOut = Long.parseLong(booster.get("time").toString());
         this.amp = Double.parseDouble(booster.get("amplifier").toString());
+        this.chance = Short.parseShort(booster.get("chance").toString());
     }
 
      public abstract void useBooster();
@@ -71,6 +73,10 @@ public abstract class Booster {
 
     public double getAmp() {
         return amp;
+    }
+
+    public short getChance() {
+        return chance;
     }
 
     public long getTimeOut() {

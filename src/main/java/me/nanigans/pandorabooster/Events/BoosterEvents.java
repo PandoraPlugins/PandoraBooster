@@ -31,8 +31,10 @@ public class BoosterEvents implements Listener {
         final Player player = event.getPlayer();
         if (XP.getXpBoost().containsKey(player.getUniqueId())) {
             XP boost = XP.getXpBoost().get(player.getUniqueId());
-            final double amplifier = boost.getAmplifier();
-            event.setAmount((int) Math.round(event.getAmount()*amplifier));
+            if(Math.random()*100 < boost.getChance()) {
+                final double amplifier = boost.getAmplifier();
+                event.setAmount((int) Math.round(event.getAmount() * amplifier));
+            }
         }
 
     }
@@ -46,9 +48,11 @@ public class BoosterEvents implements Listener {
             double added = event.getNewBalance().doubleValue() - event.getOldBalance().doubleValue();
             if(added > 0){
                 final Money money = Money.getMoneyBoosts().get(player.getUniqueId());
-                added *= money.getAmp();
-                event.setNewBalance(event.getOldBalance().add(BigDecimal.valueOf(added)));
-                System.out.println("bal added " + added);
+                if(Math.random() < money.getChance()) {
+                    added *= money.getAmp();
+                    event.setNewBalance(event.getOldBalance().add(BigDecimal.valueOf(added)));
+                    System.out.println("bal added " + added);
+                }
             }
 
         }
@@ -58,14 +62,13 @@ public class BoosterEvents implements Listener {
     @EventHandler
     public void onOreDig(OreGainEvent event){
         final Player player = event.getPlayer();
-        System.out.println(1);
         if(Mines.getMineBoosts().containsKey(player.getUniqueId())){
-            System.out.println(2);
             final Mines mines = Mines.getMineBoosts().get(player.getUniqueId());
-            final double amp = mines.getAmp();
-            event.getItem().setAmount((int) (event.getItem().getAmount()*amp));
-            System.out.println("amt got" + event.getItem().getAmount());
-
+            System.out.println("mines.getChance() = " + mines.getChance());
+            if(Math.random()*100 < mines.getChance()) {
+                final double amp = mines.getAmp();
+                event.getItem().setAmount((int) (event.getItem().getAmount() * amp));
+            }
         }
 
     }
