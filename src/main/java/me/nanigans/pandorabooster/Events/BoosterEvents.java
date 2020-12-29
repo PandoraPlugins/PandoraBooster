@@ -100,6 +100,7 @@ public class BoosterEvents implements Listener {
     public void rightClickBooster(PlayerInteractEvent event){
 
         if(event.getAction().toString().toLowerCase().contains("right")){
+            System.out.println("1 = " + 1);
             if(event.getItem() != null){
                 final ItemStack item = event.getItem();
                 if(NBTData.containsNBT(item, Items.ISBOOSTER.toString())){
