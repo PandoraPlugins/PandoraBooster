@@ -1,16 +1,13 @@
 package me.nanigans.pandorabooster.Events;
 
-import com.earth2me.essentials.Essentials;
-import com.massivecraft.factions.cmd.econ.CmdMoney;
 import me.nanigans.pandorabooster.Booster;
 import me.nanigans.pandorabooster.BoosterEffects.*;
 import me.nanigans.pandorabooster.DataEnums.Items;
 import me.nanigans.pandorabooster.Utility.JsonUtil;
 import me.nanigans.pandorabooster.Utility.NBTData;
-import me.nanigans.pandorabooster.Utility.YamlGenerator;
 import me.nanigans.pandoramines.Events.OreGainEvent;
+import me.swanis.mobcoins.events.MobCoinsReceiveEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,6 +21,22 @@ import java.util.Timer;
 
 public class BoosterEvents implements Listener {
 
+    @EventHandler
+    public void mobCoinGain(MobCoinsReceiveEvent event){
+
+        final Player player = event.getProfile().getPlayer();
+        if(MobCoin.getMobCoinBoosters().containsKey(player.getUniqueId())){
+
+            final MobCoin mobCoin = MobCoin.getMobCoinBoosters().get(player.getUniqueId());
+            if(Math.random()*100 < mobCoin.getChance()){
+
+                event.setAmount((int) Math.round(event.getAmount()*mobCoin.getAmp()));
+
+            }
+
+        }
+
+    }
 
     @EventHandler
     public void onXPGain(PlayerExpChangeEvent event){
@@ -36,7 +49,6 @@ public class BoosterEvents implements Listener {
                 event.setAmount((int) Math.round(event.getAmount() * amplifier));
             }
         }
-
     }
 
     @EventHandler
@@ -67,7 +79,7 @@ public class BoosterEvents implements Listener {
             System.out.println("mines.getChance() = " + mines.getChance());
             if(Math.random()*100 < mines.getChance()) {
                 final double amp = mines.getAmp();
-                event.getItem().setAmount((int) (event.getItem().getAmount() * amp));
+                event.getItem().setAmount((int) Math.round(event.getItem().getAmount() * amp));
             }
         }
 
@@ -86,7 +98,6 @@ public class BoosterEvents implements Listener {
                     final String type = booster.get("type").toString();
                     Booster booster1 = null;
 
-                    System.out.println("type = " + type);
                     switch (type) {
                         case "XP": booster1 = new XP(player, booster, boosterName);
                         break;
