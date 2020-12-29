@@ -5,6 +5,7 @@ import dev.minecraftplugins.pandora.pandoralake.listener.RewardEvent;
 import me.nanigans.pandorabooster.Booster;
 import me.nanigans.pandorabooster.BoosterEffects.*;
 import me.nanigans.pandorabooster.DataEnums.Items;
+import me.nanigans.pandorabooster.Utility.BoostTypes;
 import me.nanigans.pandorabooster.Utility.JsonUtil;
 import me.nanigans.pandorabooster.Utility.NBTData;
 import me.nanigans.pandoramines.Events.OreGainEvent;
@@ -152,7 +153,7 @@ public class BoosterEvents implements Listener {
     }
 
     @EventHandler
-    public void rightClickBooster(PlayerInteractEvent event){
+    public void rightClickBooster(PlayerInteractEvent event) throws IllegalAccessException, InstantiationException {
 
         if(event.getAction().toString().toLowerCase().contains("right")){
             if(event.getItem() != null){
@@ -162,33 +163,17 @@ public class BoosterEvents implements Listener {
                     final Player player = event.getPlayer();
                     final Map<String, Object> booster = (Map<String, Object>) JsonUtil.getData(boosterName);
                     final String type = booster.get("type").toString();
-                    Booster booster1 = null;
+                    Booster booster1 = (Booster) BoostTypes.valueOf(type.toUpperCase()).getClazz().newInstance();
 
-                    switch (type) {
-
-                        case "XP": booster1 = new XP(player, booster, boosterName, null);
-                        break;
-                        case "MONEY": booster1 = new Money(player, boosterName, booster, null);
-                        break;
-                        case "MOBCOIN": booster1 = new MobCoin(player, boosterName, booster, null);
-                        break;
-                        case "FISHING": booster1 = new Fishing(player, boosterName, booster, null);
-                        break;
-                        case "MINE": booster1 = new Mines(player, boosterName, booster, null);
-                        break;
-
+                    final BoostEnder boostEnder = new BoostEnder(booster1);
+                    booster1.setTimer(boostEnder);
+                    booster1.useBooster();
+                    Timer t = new Timer();
+                    t.schedule(boostEnder, booster1.getTimeOut());
+                    if (item.getAmount() == 1) {
+                        player.setItemInHand(null);
                     }
-                    if(booster1 != null) {
-                        final BoostEnder boostEnder = new BoostEnder(booster1);
-                        booster1.setTimer(boostEnder);
-                        booster1.useBooster();
-                        Timer t = new Timer();
-                        t.schedule(boostEnder, booster1.getTimeOut());
-                        if (item.getAmount() == 1) {
-                            player.setItemInHand(null);
-                        }
-                        item.setAmount(item.getAmount() - 1);
-                    }
+                    item.setAmount(item.getAmount() - 1);
 
                 }
             }
@@ -196,5 +181,7 @@ public class BoosterEvents implements Listener {
         }
 
     }
+
+
 
 }
