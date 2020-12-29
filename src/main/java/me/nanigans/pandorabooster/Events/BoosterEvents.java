@@ -56,7 +56,7 @@ public class BoosterEvents implements Listener {
         if (XP.getXpBoost().containsKey(player.getUniqueId())) {
             XP boost = XP.getXpBoost().get(player.getUniqueId());
             if(Math.random()*100 < boost.getChance()) {
-                final double amplifier = boost.getAmplifier();
+                final double amplifier = boost.getAmp();
                 event.setAmount((int) Math.round(event.getAmount() * amplifier));
             }
         }
@@ -111,21 +111,23 @@ public class BoosterEvents implements Listener {
                     Booster booster1 = null;
 
                     switch (type) {
-                        case "XP": booster1 = new XP(player, booster, boosterName);
+
+                        case "XP": booster1 = new XP(player, booster, boosterName, null);
                         break;
-                        case "MONEY": booster1 = new Money(player, boosterName, booster);
+                        case "MONEY": booster1 = new Money(player, boosterName, booster, null);
                         break;
-                        case "MOBCOIN": booster1 = new MobCoin(player, boosterName, booster);
+                        case "MOBCOIN": booster1 = new MobCoin(player, boosterName, booster, null);
                         break;
-                        case "FISHING": booster1 = new Fishing(player, boosterName, booster);
+                        case "FISHING": booster1 = new Fishing(player, boosterName, booster, null);
                         break;
-                        case "MINE": booster1 = new Mines(player, boosterName, booster);
+                        case "MINE": booster1 = new Mines(player, boosterName, booster, null);
                         break;
+
                     }
                     if(booster1 != null) {
-
-                        booster1.useBooster();
                         final BoostEnder boostEnder = new BoostEnder(booster1);
+                        booster1.setTimer(boostEnder);
+                        booster1.useBooster();
                         Timer t = new Timer();
                         t.schedule(boostEnder, booster1.getTimeOut());
                         if (item.getAmount() == 1) {

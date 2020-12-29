@@ -12,12 +12,15 @@ public class MobCoin extends Booster {
 
     private static final Map<UUID, MobCoin> mobCoinBoosters = new HashMap<>();
 
-    public MobCoin(Player player, String name, Map<String, Object> booster) {
-        super(player, name, booster);
+    public MobCoin(Player player, String name, Map<String, Object> booster, BoostEnder timer) {
+        super(player, name, booster, timer);
     }
 
     @Override
     public void useBooster() {
+        if(mobCoinBoosters.containsKey(player.getUniqueId())){
+            mobCoinBoosters.get(player.getUniqueId()).getTimer().cancel();
+        }
         mobCoinBoosters.put(player.getUniqueId(), this);
         player.sendMessage(ChatColor.GREEN+"MobCoin booster added");
     }

@@ -12,8 +12,8 @@ public class Fishing extends Booster {
 
     private static final Map<UUID, Fishing> fishBoosters = new HashMap<>();
 
-    public Fishing(Player player, String name, Map<String, Object> booster) {
-        super(player, name, booster);
+    public Fishing(Player player, String name, Map<String, Object> booster, BoostEnder timer) {
+        super(player, name, booster, timer);
     }
 
     @Override

@@ -12,12 +12,15 @@ public class Mines extends Booster {
 
     private static final Map<UUID, Mines> mineBoosts = new HashMap<>();
 
-    public Mines(Player player, String name, Map<String, Object> booster) {
-        super(player, name, booster);
+    public Mines(Player player, String name, Map<String, Object> booster, BoostEnder timer) {
+        super(player, name, booster, timer);
     }
 
     @Override
     public void useBooster() {
+        if(mineBoosts.containsKey(player.getUniqueId())){
+            mineBoosts.get(player.getUniqueId()).getTimer().cancel();
+        }
         mineBoosts.put(player.getUniqueId(), this);
         player.sendMessage(ChatColor.GREEN+"Mine Boost used");
     }

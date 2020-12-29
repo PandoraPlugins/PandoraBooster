@@ -11,12 +11,15 @@ import java.util.UUID;
 public class Money extends Booster {
     private static final Map<UUID, Money> moneyBoosts = new HashMap<>();
 
-    public Money(Player player, String name, Map<String, Object> booster) {
-        super(player, name, booster);
+    public Money(Player player, String name, Map<String, Object> booster, BoostEnder timer) {
+        super(player, name, booster, timer);
     }
 
     @Override
     public void useBooster() {
+        if(moneyBoosts.containsKey(player.getUniqueId())){
+            moneyBoosts.get(player.getUniqueId()).getTimer().cancel();
+        }
         moneyBoosts.put(player.getUniqueId(), this);
         player.sendMessage(ChatColor.GREEN+"You have used a money booster");
     }

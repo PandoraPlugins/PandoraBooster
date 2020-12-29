@@ -1,5 +1,6 @@
 package me.nanigans.pandorabooster;
 
+import me.nanigans.pandorabooster.BoosterEffects.BoostEnder;
 import me.nanigans.pandorabooster.DataEnums.Items;
 import me.nanigans.pandorabooster.Utility.Glow;
 import me.nanigans.pandorabooster.Utility.ItemUtils;
@@ -23,14 +24,16 @@ public abstract class Booster {
     protected long timeOut;
     protected double amp;
     protected short chance;
+    protected BoostEnder timer;
 
-    public Booster(Player player, String name, Map<String, Object> booster){
+    public Booster(Player player, String name, Map<String, Object> booster, BoostEnder timer){
         this.player = player;
         this.boosterData = booster;
         this.name = name;
         this.timeOut = Long.parseLong(booster.get("time").toString());
         this.amp = Double.parseDouble(booster.get("amplifier").toString());
         this.chance = Short.parseShort(booster.get("chance").toString());
+        this.timer = timer;
     }
 
      public abstract void useBooster();
@@ -77,6 +80,14 @@ public abstract class Booster {
 
     public short getChance() {
         return chance;
+    }
+
+    public BoostEnder getTimer() {
+        return timer;
+    }
+
+    public void setTimer(BoostEnder timer) {
+        this.timer = timer;
     }
 
     public long getTimeOut() {

@@ -9,28 +9,17 @@ import java.util.Map;
 import java.util.UUID;
 
 public class XP extends Booster {
-    private final long duration;
-    private final double amplifier;
     private final static Map<UUID, XP> xpBoost = new HashMap<>();
 
-    public XP(Player player, Map<String, Object> data, String name){
-        super(player, name, data);
-        this.amplifier = Double.parseDouble(data.get("amplifier").toString());
-        duration = Long.parseLong(data.get("time").toString());
+    public XP(Player player, Map<String, Object> data, String name, BoostEnder timer){
+        super(player, name, data, timer);
     }
-
-    public XP(Player player, Map<String, Object> data, String name, long time){
-        super(player, name, data);
-        this.amplifier = Double.parseDouble(data.get("amplifier").toString());
-        duration = time;
-    }
-
-    public double getAmplifier() {
-        return amplifier;
-    }
-
+    
     @Override
     public void useBooster() {
+        if (xpBoost.containsKey(player.getUniqueId())) {
+            xpBoost.get(player.getUniqueId()).getTimer().cancel();
+        }
         xpBoost.put(player.getUniqueId(), this);
         player.sendMessage(ChatColor.GREEN+"Activated XP Booster");
     }
@@ -44,19 +33,5 @@ public class XP extends Booster {
         return xpBoost;
     }
 
-    public Player getPlayer() {
-        return player;
-    }
 
-    public String getName() {
-        return name;
-    }
-
-    public Map<String, Object> getData() {
-        return super.boosterData;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
 }
