@@ -4,7 +4,6 @@ main: me.nanigans.pandorabooster.PandoraBooster
 api-version: 1.16
 authors: [ProNanigans]
 description: A booster plugin for PandoraPvp
-depend: [ProtocolLib, PacketWrapper]
 commands:
   givebooster:
     usage: /givebooster <player> <boostername> <amount>

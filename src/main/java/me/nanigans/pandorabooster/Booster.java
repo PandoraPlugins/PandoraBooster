@@ -23,9 +23,9 @@ interface BoostMethods{
     void execute(Player player, Map<String, Object> data, String name);
 }
 public class Booster {
-    private Player player;
-    private Map<String, Object> boosterData;
-    private String name;
+    protected Player player;
+    protected Map<String, Object> boosterData;
+    protected String name;
 
     public Booster(Player player, String name, Map<String, Object> booster){
         this.player = player;
@@ -35,18 +35,14 @@ public class Booster {
 
     public void useBooster(){
 
-        addEffectToPlayer(player, "xp", boosterData);
-        if(boosterData.get("boostFaction").toString().equals("true")){
-
-        }
+        addEffectToPlayer(player, this.name, boosterData);
 
     }
 
     public static void addEffectToPlayer(Player player, String name, Map<String, Object> data){
-
+        System.out.println("data = " + data);
         final EType eType = EType.valueOf(data.get("type").toString());
         eType.execute(player, data, name);
-
     }
 
 
@@ -72,7 +68,7 @@ public class Booster {
 
 
         private static void addXP(Player player, Map<String, Object> data, String name){
-            new XP(player, data, name);
+            final XP xp = new XP(player, data, name);
 
         }
         private static void addMoney(Player player, Map<String, Object> data, String name){
@@ -108,9 +104,9 @@ public class Booster {
         final String name = ChatColor.translateAlternateColorCodes('&', itemMeta.get("displayName").toString());
 
         if (EnumUtils.isValidEnum(Material.class, material)) {
-            boosterItem = ItemUtils.createItem(Material.valueOf(material), name, Items.ISBOOSTER+"~"+name);
+            boosterItem = ItemUtils.createItem(Material.valueOf(material), name, Items.ISBOOSTER+"~"+this.name);
         }else{
-            boosterItem = ItemUtils.createItem(material, name, Items.ISBOOSTER+"~"+name);
+            boosterItem = ItemUtils.createItem(material, name, Items.ISBOOSTER+"~"+this.name);
         }
 
         boosterItem.setAmount(amount);

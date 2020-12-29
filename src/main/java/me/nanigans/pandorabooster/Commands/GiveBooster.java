@@ -1,22 +1,15 @@
 package me.nanigans.pandorabooster.Commands;
 
 import me.nanigans.pandorabooster.Booster;
-import me.nanigans.pandorabooster.DataEnums.Items;
-import me.nanigans.pandorabooster.Utility.Glow;
-import me.nanigans.pandorabooster.Utility.ItemUtils;
 import me.nanigans.pandorabooster.Utility.JsonUtil;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.json.simple.JSONArray;
 
 import java.util.List;
 import java.util.Map;

@@ -1,29 +1,13 @@
 package me.nanigans.pandorabooster;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers;
-import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
 import me.nanigans.pandorabooster.Commands.GiveBooster;
 import me.nanigans.pandorabooster.Events.BoosterEvents;
 import me.nanigans.pandorabooster.Utility.CustomizedObjectTypeAdapter;
 import me.nanigans.pandorabooster.Utility.Glow;
-import net.minecraft.server.v1_8_R3.PacketPlayOutExperience;
-import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardTeam;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -60,7 +44,6 @@ public final class PandoraBooster extends JavaPlugin {
             }
 
         }
-//PlayerExpChangeEvent
     }
 
 
