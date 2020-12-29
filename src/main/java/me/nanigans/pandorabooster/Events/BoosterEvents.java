@@ -3,9 +3,7 @@ package me.nanigans.pandorabooster.Events;
 import com.earth2me.essentials.Essentials;
 import com.massivecraft.factions.cmd.econ.CmdMoney;
 import me.nanigans.pandorabooster.Booster;
-import me.nanigans.pandorabooster.BoosterEffects.BoostEnder;
-import me.nanigans.pandorabooster.BoosterEffects.Money;
-import me.nanigans.pandorabooster.BoosterEffects.XP;
+import me.nanigans.pandorabooster.BoosterEffects.*;
 import me.nanigans.pandorabooster.DataEnums.Items;
 import me.nanigans.pandorabooster.Utility.JsonUtil;
 import me.nanigans.pandorabooster.Utility.NBTData;
@@ -74,6 +72,12 @@ public class BoosterEvents implements Listener {
                         case "XP": booster1 = new XP(player, booster, boosterName);
                         break;
                         case "MONEY": booster1 = new Money(player, boosterName, booster);
+                        break;
+                        case "MOBCOIN": booster1 = new MobCoin(player, boosterName, booster);
+                        break;
+                        case "FISHING": booster1 = new Fishing(player, boosterName, booster);
+                        break;
+                        case "MINE": booster1 = new Mines(player, boosterName, booster);
                         break;
                     }
                     if(booster1 != null) {
