@@ -2,6 +2,7 @@ package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.UUID;
 public class Money extends Booster {
     private static final Map<UUID, Money> moneyBoosts = new HashMap<>();
 
-    public Money(Player player, String name, Map<String, Object> booster, BoostEnder timer) {
+    public Money(OfflinePlayer player, String name, Map<String, Object> booster, BoostEnder timer) {
         super(player, name, booster, timer);
     }
 
@@ -21,7 +22,8 @@ public class Money extends Booster {
             moneyBoosts.get(player.getUniqueId()).getTimer().cancel();
         }
         moneyBoosts.put(player.getUniqueId(), this);
-        player.sendMessage(ChatColor.GREEN+"You have used a money booster");
+        if(player.isOnline())
+        player.getPlayer().sendMessage(ChatColor.GREEN+"You have used a money booster");
     }
 
     @Override

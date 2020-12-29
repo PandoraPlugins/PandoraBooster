@@ -6,18 +6,19 @@ import com.google.gson.reflect.TypeToken;
 import me.nanigans.pandorabooster.BoosterEffects.*;
 import me.nanigans.pandorabooster.Commands.GiveBooster;
 import me.nanigans.pandorabooster.Events.BoosterEvents;
-import me.nanigans.pandorabooster.Utility.*;
+import me.nanigans.pandorabooster.Utility.CustomizedObjectTypeAdapter;
+import me.nanigans.pandorabooster.Utility.Glow;
+import me.nanigans.pandorabooster.Utility.JsonUtil;
+import me.nanigans.pandorabooster.Utility.YamlGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -35,7 +36,6 @@ public final class PandoraBooster extends JavaPlugin {
         // Plugin startup logic
 
         File configFile = new File(getDataFolder(), "boosters.json");
-        new File(getDataFolder()+"/Users/").mkdirs();
         registerGlow();
         getCommand("givebooster").setExecutor(new GiveBooster());
         getServer().getPluginManager().registerEvents(new BoosterEvents(), this);
@@ -58,18 +58,13 @@ public final class PandoraBooster extends JavaPlugin {
             }
 
         }
-
-        try {
-            returnEffects();
-        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        returnEffects();
 
     }
 
-    private void returnEffects() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    private void returnEffects() {
 
-        File file = new File("Effects");
+        File file = new File(getDataFolder()+"/Effects");
         if(file.exists()){
 
             final File[] files = file.listFiles();
@@ -88,17 +83,27 @@ public final class PandoraBooster extends JavaPlugin {
                             final String name = effect.get("name").toString();
                             final Map<String, Object> data = (Map<String, Object>) JsonUtil.getData(name);
                             if(data != null){
-                                final Player player = Bukkit.getOfflinePlayer(file2.getName()).getPlayer();
+                                final OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(file2.getName().replace(".yml", "")));
 
                                 final String type = data.get("type").toString();
-                                final Booster booster = (Booster) BoostTypes.valueOf(type.toUpperCase()).getClazz().getConstructor(Player.class, String.class, Map.class, BoostEnder.class)
-                                        .newInstance(player, name, data, null);
+                                final Booster booster = BoosterEvents.getBoosterfromName(type, player, name, data);
                                 final BoostEnder boostEnder = new BoostEnder(booster);
                                 Timer t = new Timer();
                                 t.schedule(boostEnder, Long.parseLong(effect.get("timer").toString()));
                                 booster.setTimer(boostEnder);
-                                boostEnder.pause();
+                                booster.useBooster();
+                                if (booster instanceof MobCoin) {
+                                    MobCoin.getMobCoinBoosters().put(player.getUniqueId(), ((MobCoin) booster));
+                                }else if(booster instanceof XP)
+                                    XP.getXpBoost().put(player.getUniqueId(), ((XP) booster));
+                                else if(booster instanceof Fishing)
+                                    Fishing.getFishBoosters().put(player.getUniqueId(), ((Fishing) booster));
+                                else if(booster instanceof Mines)
+                                    Mines.getMineBoosts().put(player.getUniqueId(), ((Mines) booster));
+                                else if(booster instanceof Money)
+                                    Money.getMoneyBoosts().put(player.getUniqueId(), (Money) booster);
 
+                                booster.getTimer().pause();
                             }
 
 
@@ -148,16 +153,17 @@ public final class PandoraBooster extends JavaPlugin {
         boosters.putAll(mobCoinBoosters);
         boosters.putAll(moneyBoosts);
 
+    if(boosters.size() > 0) {
         boosters.forEach((i, j) -> {
-            final YamlGenerator yaml = new YamlGenerator("Effects/"+j.getType()+"/" + i + ".yml");
+            final YamlGenerator yaml = new YamlGenerator(getDataFolder() + "/Effects/" + j.getType() + "/" + i + ".yml");
             final Map<String, Object> data = new HashMap<>();
             data.put("name", j.getName());
-            data.put("paused", j.getTimer().isPaused());
             j.getTimer().pause();
             data.put("timer", j.getTimer().getRemainingTime());
             yaml.getData().set("Effect", data);
             yaml.save();
         });
+    }
 
     }
 }

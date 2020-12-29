@@ -2,6 +2,7 @@ package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -12,7 +13,7 @@ public class MobCoin extends Booster {
 
     private static final Map<UUID, MobCoin> mobCoinBoosters = new HashMap<>();
 
-    public MobCoin(Player player, String name, Map<String, Object> booster, BoostEnder timer) {
+    public MobCoin(OfflinePlayer player, String name, Map<String, Object> booster, BoostEnder timer) {
         super(player, name, booster, timer);
     }
 
@@ -22,7 +23,8 @@ public class MobCoin extends Booster {
             mobCoinBoosters.get(player.getUniqueId()).getTimer().cancel();
         }
         mobCoinBoosters.put(player.getUniqueId(), this);
-        player.sendMessage(ChatColor.GREEN+"MobCoin booster added");
+        if(player.isOnline())
+        player.getPlayer().sendMessage(ChatColor.GREEN+"MobCoin booster added");
     }
 
     @Override

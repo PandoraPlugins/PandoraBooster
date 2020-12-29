@@ -12,6 +12,7 @@ public enum BoostTypes {
 
     BoostTypes(String type, Class<?> xpClass) {
         this.type = type;
+        this.clazz = xpClass;
     }
 
     public Class<?> getClazz() {

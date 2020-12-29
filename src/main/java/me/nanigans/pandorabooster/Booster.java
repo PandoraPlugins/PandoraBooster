@@ -8,6 +8,7 @@ import me.nanigans.pandorabooster.Utility.JsonUtil;
 import org.apache.commons.lang3.EnumUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,10 +16,11 @@ import org.json.simple.JSONArray;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public abstract class Booster {
-    protected Player player;
+    protected OfflinePlayer player;
     protected Map<String, Object> boosterData;
     protected String name;
     protected long timeOut;
@@ -26,8 +28,9 @@ public abstract class Booster {
     protected short chance;
     protected BoostEnder timer;
     protected String type;
+    protected static Map<UUID, Booster> effectBoosters;
 
-    public Booster(Player player, String name, Map<String, Object> booster, BoostEnder timer){
+    public Booster(OfflinePlayer player, String name, Map<String, Object> booster, BoostEnder timer){
         this.player = player;
         this.boosterData = booster;
         this.name = name;
@@ -100,12 +103,12 @@ public abstract class Booster {
         return type;
     }
 
-    public long getTimeOut() {
-        return timeOut;
+    public static Map<UUID, Booster> getEffectBoosters() {
+        return effectBoosters;
     }
 
-    public Player getPlayer() {
-        return player;
+    public long getTimeOut() {
+        return timeOut;
     }
 
     public Map<String, Object> getBoosterData() {

@@ -2,6 +2,7 @@ package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -12,7 +13,7 @@ public class Mines extends Booster {
 
     private static final Map<UUID, Mines> mineBoosts = new HashMap<>();
 
-    public Mines(Player player, String name, Map<String, Object> booster, BoostEnder timer) {
+    public Mines(OfflinePlayer player, String name, Map<String, Object> booster, BoostEnder timer) {
         super(player, name, booster, timer);
     }
 
@@ -22,7 +23,8 @@ public class Mines extends Booster {
             mineBoosts.get(player.getUniqueId()).getTimer().cancel();
         }
         mineBoosts.put(player.getUniqueId(), this);
-        player.sendMessage(ChatColor.GREEN+"Mine Boost used");
+        if(player.isOnline())
+        player.getPlayer().sendMessage(ChatColor.GREEN+"Mine Boost used");
     }
 
     @Override
