@@ -21,12 +21,14 @@ public abstract class Booster {
     protected Map<String, Object> boosterData;
     protected String name;
     protected long timeOut;
+    protected double amp;
 
     public Booster(Player player, String name, Map<String, Object> booster){
         this.player = player;
         this.boosterData = booster;
         this.name = name;
         this.timeOut = Long.parseLong(booster.get("time").toString());
+        this.amp = Double.parseDouble(booster.get("amplifier").toString());
     }
 
      public abstract void useBooster();
@@ -65,6 +67,10 @@ public abstract class Booster {
 
         return boosterItem;
 
+    }
+
+    public double getAmp() {
+        return amp;
     }
 
     public long getTimeOut() {

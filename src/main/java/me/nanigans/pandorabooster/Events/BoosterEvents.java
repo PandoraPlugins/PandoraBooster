@@ -1,13 +1,16 @@
 package me.nanigans.pandorabooster.Events;
 
+import com.earth2me.essentials.Essentials;
 import com.massivecraft.factions.cmd.econ.CmdMoney;
 import me.nanigans.pandorabooster.Booster;
 import me.nanigans.pandorabooster.BoosterEffects.BoostEnder;
+import me.nanigans.pandorabooster.BoosterEffects.Money;
 import me.nanigans.pandorabooster.BoosterEffects.XP;
 import me.nanigans.pandorabooster.DataEnums.Items;
 import me.nanigans.pandorabooster.Utility.JsonUtil;
 import me.nanigans.pandorabooster.Utility.NBTData;
 import me.nanigans.pandorabooster.Utility.YamlGenerator;
+import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +19,7 @@ import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Timer;
 
@@ -36,7 +40,20 @@ public class BoosterEvents implements Listener {
     }
 
     @EventHandler
-    public void onMoneyGain(){
+    public void onMoneyGain(UserBalanceUpdateEvent event){
+
+        final Player player = event.getPlayer();
+        if(Money.getMoneyBoosts().containsKey(player.getUniqueId())){
+
+            double added = event.getNewBalance().doubleValue() - event.getOldBalance().doubleValue();
+            if(added > 0){
+                final Money money = Money.getMoneyBoosts().get(player.getUniqueId());
+                added *= money.getAmp();
+                event.setNewBalance(event.getOldBalance().add(BigDecimal.valueOf(added)));
+                System.out.println("bal added " + added);
+            }
+
+        }
 
     }
 
@@ -55,6 +72,8 @@ public class BoosterEvents implements Listener {
 
                     switch (type) {
                         case "XP": booster1 = new XP(player, booster, boosterName);
+                        break;
+                        case "MONEY": booster1 = new Money(player, boosterName, booster);
                         break;
                     }
                     if(booster1 != null) {
