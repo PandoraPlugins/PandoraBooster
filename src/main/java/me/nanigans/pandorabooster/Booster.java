@@ -106,6 +106,10 @@ public abstract class Booster {
         return effectBoosters;
     }
 
+    public OfflinePlayer getPlayer() {
+        return player;
+    }
+
     public long getTimeOut() {
         return timeOut;
     }
