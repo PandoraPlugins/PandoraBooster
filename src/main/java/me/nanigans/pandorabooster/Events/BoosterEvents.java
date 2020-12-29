@@ -1,5 +1,6 @@
 package me.nanigans.pandorabooster.Events;
 
+import dev.minecraftplugins.pandora.pandoralake.listener.RewardEvent;
 import me.nanigans.pandorabooster.Booster;
 import me.nanigans.pandorabooster.BoosterEffects.*;
 import me.nanigans.pandorabooster.DataEnums.Items;
@@ -29,11 +30,21 @@ public class BoosterEvents implements Listener {
 
             final MobCoin mobCoin = MobCoin.getMobCoinBoosters().get(player.getUniqueId());
             if(Math.random()*100 < mobCoin.getChance()){
-
                 event.setAmount((int) Math.round(event.getAmount()*mobCoin.getAmp()));
-
             }
+        }
 
+    }
+
+    @EventHandler
+    public void onGainFish(RewardEvent event){
+
+        final Player player = event.getPlayer();
+        if(Fishing.getFishBoosters().containsKey(player.getUniqueId())){
+            final Fishing fishing = Fishing.getFishBoosters().get(player.getUniqueId());
+            if(Math.random()*100 < fishing.getChance()){
+                event.getItem().setAmount((int) Math.round(event.getItem().getAmount()*fishing.getAmp()));
+            }
         }
 
     }
