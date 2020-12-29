@@ -25,6 +25,7 @@ public abstract class Booster {
     protected double amp;
     protected short chance;
     protected BoostEnder timer;
+    protected String type;
 
     public Booster(Player player, String name, Map<String, Object> booster, BoostEnder timer){
         this.player = player;
@@ -34,6 +35,7 @@ public abstract class Booster {
         this.amp = Double.parseDouble(booster.get("amplifier").toString());
         this.chance = Short.parseShort(booster.get("chance").toString());
         this.timer = timer;
+        this.type = booster.get("type").toString();
     }
 
      public abstract void useBooster();
@@ -88,6 +90,14 @@ public abstract class Booster {
 
     public void setTimer(BoostEnder timer) {
         this.timer = timer;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public long getTimeOut() {

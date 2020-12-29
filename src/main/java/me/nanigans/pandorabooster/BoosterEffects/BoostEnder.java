@@ -10,12 +10,14 @@ public class BoostEnder extends TimerTask {
     private final Booster booster;
     private long endTime;
     private long remainingTime;
+    private boolean isPaused;
     public BoostEnder(Booster boost){
         this.booster = boost;
         this.endTime = boost.getTimeOut() + System.currentTimeMillis();
     }
 
     public void pause() {
+        this.isPaused = true;
         this.remainingTime = endTime - System.currentTimeMillis();
         this.cancel();
     }
@@ -27,6 +29,7 @@ public class BoostEnder extends TimerTask {
         timer.setRemainingTime(this.remainingTime);
         Timer t = new Timer();
         t.schedule(timer, this.remainingTime);
+        this.isPaused = false;
         this.booster.setTimer(timer);
     }
 
@@ -36,6 +39,18 @@ public class BoostEnder extends TimerTask {
 
     public void setRemainingTime(long remainingTime) {
         this.remainingTime = remainingTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public long getRemainingTime() {
+        return remainingTime;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
     }
 
     @Override
