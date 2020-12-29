@@ -3,7 +3,6 @@ package me.nanigans.pandorabooster.BoosterEffects;
 import me.nanigans.pandorabooster.Booster;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
