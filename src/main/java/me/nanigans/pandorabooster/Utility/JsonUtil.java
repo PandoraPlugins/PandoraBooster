@@ -1,8 +1,6 @@
 package me.nanigans.pandorabooster.Utility;
 
 
-
-
 import me.nanigans.pandorabooster.PandoraBooster;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -11,9 +9,6 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class JsonUtil {
 
@@ -44,14 +39,6 @@ public class JsonUtil {
         }catch(IOException | ParseException ignored){
             return null;
         }
-    }
-
-    public static List<?> stringToList(String string) {
-        String[] strings = string.replace("[", "").replace("]", "").split(", ");
-        System.out.println("strings = " + Arrays.toString(strings));
-        Object[] result = new Object[strings.length];
-        System.arraycopy(strings, 0, result, 0, result.length);
-        return new ArrayList(Arrays.asList(result));
     }
 
 }

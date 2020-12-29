@@ -56,10 +56,8 @@ public class BoosterEvents implements Listener {
     public void onJoin(PlayerJoinEvent event){
 
         final Player player = event.getPlayer();
-        System.out.println("XP.getXpBoost() = " + XP.getXpBoost());
         if (XP.getXpBoost().containsKey(player.getUniqueId())) {
             final XP xp = XP.getXpBoost().get(player.getUniqueId());
-            System.out.println("xp.getName() = " + xp.getName());
             xp.getTimer().resume();
         }
         if (Fishing.getFishBoosters().containsKey(player.getUniqueId())) {

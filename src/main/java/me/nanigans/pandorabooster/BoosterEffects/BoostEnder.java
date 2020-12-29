@@ -2,7 +2,6 @@ package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
 
-import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
