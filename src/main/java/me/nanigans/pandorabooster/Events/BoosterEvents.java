@@ -14,6 +14,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
@@ -21,6 +23,29 @@ import java.util.Map;
 import java.util.Timer;
 
 public class BoosterEvents implements Listener {
+
+
+    @EventHandler
+    public void playerLeave(PlayerQuitEvent event){
+
+        final Player player = event.getPlayer();
+        if (XP.getXpBoost().containsKey(player.getUniqueId())) {
+            final XP xp = XP.getXpBoost().get(player.getUniqueId());
+            xp.getTimer().pause();
+        }
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event){
+
+        final Player player = event.getPlayer();
+        if (XP.getXpBoost().containsKey(player.getUniqueId())) {
+            final XP xp = XP.getXpBoost().get(player.getUniqueId());
+            xp.getTimer().resume();
+        }
+
+    }
+
 
     @EventHandler
     public void mobCoinGain(MobCoinsReceiveEvent event){
@@ -74,7 +99,6 @@ public class BoosterEvents implements Listener {
                 if(Math.random() < money.getChance()) {
                     added *= money.getAmp();
                     event.setNewBalance(event.getOldBalance().add(BigDecimal.valueOf(added)));
-                    System.out.println("bal added " + added);
                 }
             }
 
@@ -87,7 +111,6 @@ public class BoosterEvents implements Listener {
         final Player player = event.getPlayer();
         if(Mines.getMineBoosts().containsKey(player.getUniqueId())){
             final Mines mines = Mines.getMineBoosts().get(player.getUniqueId());
-            System.out.println("mines.getChance() = " + mines.getChance());
             if(Math.random()*100 < mines.getChance()) {
                 final double amp = mines.getAmp();
                 event.getItem().setAmount((int) Math.round(event.getItem().getAmount() * amp));
@@ -100,7 +123,6 @@ public class BoosterEvents implements Listener {
     public void rightClickBooster(PlayerInteractEvent event){
 
         if(event.getAction().toString().toLowerCase().contains("right")){
-            System.out.println("1 = " + 1);
             if(event.getItem() != null){
                 final ItemStack item = event.getItem();
                 if(NBTData.containsNBT(item, Items.ISBOOSTER.toString())){

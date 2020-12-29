@@ -14,7 +14,7 @@ public class XP extends Booster {
     public XP(Player player, Map<String, Object> data, String name, BoostEnder timer){
         super(player, name, data, timer);
     }
-    
+
     @Override
     public void useBooster() {
         if (xpBoost.containsKey(player.getUniqueId())) {
