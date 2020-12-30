@@ -56,4 +56,13 @@ public class BoostEnder extends TimerTask {
                         .toString().replaceAll("\\{type}", booster.getType())
                         .replaceAll("\\{name}", booster.getName())));
     }
+
+    public BoostEnder copy() {
+
+        BoostEnder copy = new BoostEnder(this.booster);
+        copy.setEndTime(this.endTime);
+        copy.setRemainingTime(this.remainingTime);
+        return copy;
+
+    }
 }

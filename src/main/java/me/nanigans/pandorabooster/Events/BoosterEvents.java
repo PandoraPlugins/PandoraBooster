@@ -1,5 +1,8 @@
 package me.nanigans.pandorabooster.Events;
 
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
 import dev.minecraftplugins.pandora.pandoralake.listener.RewardEvent;
 import me.nanigans.pandorabooster.Booster;
 import me.nanigans.pandorabooster.BoosterEffects.*;
@@ -24,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 
 public class BoosterEvents implements Listener {
@@ -143,15 +147,19 @@ public class BoosterEvents implements Listener {
                     if(booster1 != null) {
                         final BoostEnder boostEnder = new BoostEnder(booster1);
                         booster1.setTimer(boostEnder);
-                        if(!Booster.getEffectBoosters().containsKey(player.getUniqueId()))
-                            Booster.getEffectBoosters().put(player.getUniqueId(), new HashMap<>());
+                        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player.getPlayer());
+                        if(Boolean.parseBoolean(booster.get("boostFaction").toString()) && !fPlayer.getFaction().isWilderness()){
 
-                        booster1.useBooster();
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                                JsonUtil.getData("_messages.booster_activate").toString().replaceAll("\\{type}", type)
-                        .replaceAll("\\{name}", boosterName)));
-                        Timer t = new Timer();
-                        t.schedule(boostEnder, booster1.getTimeOut());
+                            Faction f = fPlayer.getFaction();
+                            final Set<FPlayer> fPlayers = f.getFPlayers();
+                            for (FPlayer fPla : fPlayers) {
+                                effectPlayer(fPla.getPlayer(), booster1, boosterName, type, boostEnder.copy());
+                            }
+
+                        }else{
+                            effectPlayer(player, booster1, boosterName, type, boostEnder.copy());
+                        }
+
                         if (item.getAmount() == 1) {
                             player.setItemInHand(null);
                         }
@@ -163,6 +171,18 @@ public class BoosterEvents implements Listener {
 
         }
 
+    }
+
+    private static void effectPlayer(Player player, Booster booster1, String boosterName, String type, BoostEnder boostEnder){
+        if(!Booster.getEffectBoosters().containsKey(player.getUniqueId()))
+            Booster.getEffectBoosters().put(player.getUniqueId(), new HashMap<>());
+
+        booster1.useBooster();
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                JsonUtil.getData("_messages.booster_activate").toString().replaceAll("\\{type}", type)
+                        .replaceAll("\\{name}", boosterName)));
+        Timer t = new Timer();
+        t.schedule(boostEnder, booster1.getTimeOut());
     }
 
     public static Booster getBoosterfromName(String type, OfflinePlayer player, String boosterName, Map<String, Object> booster){

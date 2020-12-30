@@ -82,6 +82,7 @@ public abstract class Booster {
 
     }
 
+
     public double getAmp() {
         return amp;
     }
