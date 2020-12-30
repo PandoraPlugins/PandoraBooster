@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import me.nanigans.pandorabooster.BoosterEffects.*;
 import me.nanigans.pandorabooster.Commands.CurrentBoosters;
 import me.nanigans.pandorabooster.Commands.GiveBooster;
+import me.nanigans.pandorabooster.Commands.GiveTab;
 import me.nanigans.pandorabooster.Events.BoosterEvents;
 import me.nanigans.pandorabooster.Utility.*;
 import org.bukkit.Bukkit;
@@ -36,6 +37,7 @@ public final class PandoraBooster extends JavaPlugin {
         File configFile = new File(getDataFolder(), "boosters.json");
         registerGlow();
         getCommand("givebooster").setExecutor(new GiveBooster());
+        getCommand("givebooster").setTabCompleter(new GiveTab());
         getCommand("currentboosters").setExecutor(new CurrentBoosters());
         getServer().getPluginManager().registerEvents(new BoosterEvents(), this);
         fishing.mkdirs();
