@@ -121,7 +121,8 @@ public class BoosterEvents implements Listener {
             final Mines mines = (Mines) Booster.getEffectBoosters().get(player.getUniqueId()).get(BoostTypes.MINES);
             if(Math.random()*100 < mines.getChance()) {
                 final double amp = mines.getAmp();
-                event.getItem().setAmount((int) Math.round(event.getItem().getAmount() * amp));
+                event.setPure(event.getPure()*amp);
+                event.setSpecial(event.getPure()*amp);
             }
         }
 
