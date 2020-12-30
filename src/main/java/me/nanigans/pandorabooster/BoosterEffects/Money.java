@@ -1,6 +1,7 @@
 package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
+import me.nanigans.pandorabooster.Utility.BoostTypes;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
@@ -17,18 +18,19 @@ public class Money extends Booster {
 
     @Override
     public void useBooster() {
-        if(moneyBoosts.containsKey(player.getUniqueId())){
-            moneyBoosts.get(player.getUniqueId()).getTimer().cancel();
+        if(effectBoosters.get(player.getUniqueId()).containsKey(BoostTypes.MONEY)){
+            effectBoosters.get(player.getUniqueId()).get(BoostTypes.MONEY).getTimer().cancel();
         }
-        moneyBoosts.put(player.getUniqueId(), this);
+        effectBoosters.get(player.getUniqueId()).put(BoostTypes.MONEY, this);
         if(player.isOnline())
         player.getPlayer().sendMessage(ChatColor.GREEN+"You have used a money booster");
     }
 
     @Override
     public void stop() {
-        moneyBoosts.remove(player.getUniqueId(), this);
-    }
+        effectBoosters.get(player.getUniqueId()).remove(BoostTypes.MONEY);
+        if(effectBoosters.get(player.getUniqueId()).isEmpty())
+            effectBoosters.remove(player.getUniqueId());    }
 
     public static Map<UUID, Money> getMoneyBoosts() {
         return moneyBoosts;

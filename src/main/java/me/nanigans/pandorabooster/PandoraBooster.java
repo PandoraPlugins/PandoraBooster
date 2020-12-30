@@ -4,12 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import me.nanigans.pandorabooster.BoosterEffects.*;
+import me.nanigans.pandorabooster.Commands.CurrentBoosters;
 import me.nanigans.pandorabooster.Commands.GiveBooster;
 import me.nanigans.pandorabooster.Events.BoosterEvents;
-import me.nanigans.pandorabooster.Utility.CustomizedObjectTypeAdapter;
-import me.nanigans.pandorabooster.Utility.Glow;
-import me.nanigans.pandorabooster.Utility.JsonUtil;
-import me.nanigans.pandorabooster.Utility.YamlGenerator;
+import me.nanigans.pandorabooster.Utility.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
@@ -38,6 +36,7 @@ public final class PandoraBooster extends JavaPlugin {
         File configFile = new File(getDataFolder(), "boosters.json");
         registerGlow();
         getCommand("givebooster").setExecutor(new GiveBooster());
+        getCommand("currentboosters").setExecutor(new CurrentBoosters());
         getServer().getPluginManager().registerEvents(new BoosterEvents(), this);
         fishing.mkdirs();
         mines.mkdirs();
@@ -77,6 +76,7 @@ public final class PandoraBooster extends JavaPlugin {
                     if(nested != null){
 
                         for (File file2 : nested) {
+                            if(!file2.getAbsolutePath().endsWith(".yml")) continue;
 
                             final YamlGenerator yaml = new YamlGenerator(file2.getAbsolutePath());
                             final Map<String, Object> effect = YamlGenerator.getConfigSectionValue(yaml.getData().get("Effect"), false);
@@ -89,19 +89,12 @@ public final class PandoraBooster extends JavaPlugin {
                                 final Booster booster = BoosterEvents.getBoosterfromName(type, player, name, data);
                                 final BoostEnder boostEnder = new BoostEnder(booster);
                                 Timer t = new Timer();
-                                t.schedule(boostEnder, Long.parseLong(effect.get("timer").toString()));
+                                t.schedule(boostEnder, Math.abs(Long.parseLong(effect.get("timer").toString())));
                                 booster.setTimer(boostEnder);
+                                if(!Booster.getEffectBoosters().containsKey(player.getUniqueId()))
+                                    Booster.getEffectBoosters().put(player.getUniqueId(), new HashMap<>());
+                                Booster.getEffectBoosters().get(player.getUniqueId()).put(booster.getBoostType(), booster);
                                 booster.useBooster();
-                                if (booster instanceof MobCoin) {
-                                    MobCoin.getMobCoinBoosters().put(player.getUniqueId(), ((MobCoin) booster));
-                                }else if(booster instanceof XP)
-                                    XP.getXpBoost().put(player.getUniqueId(), ((XP) booster));
-                                else if(booster instanceof Fishing)
-                                    Fishing.getFishBoosters().put(player.getUniqueId(), ((Fishing) booster));
-                                else if(booster instanceof Mines)
-                                    Mines.getMineBoosts().put(player.getUniqueId(), ((Mines) booster));
-                                else if(booster instanceof Money)
-                                    Money.getMoneyBoosts().put(player.getUniqueId(), (Money) booster);
 
                                 booster.getTimer().pause();
                             }
@@ -142,28 +135,21 @@ public final class PandoraBooster extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        final Map<UUID, XP> xpBoost = XP.getXpBoost();
-        final Map<UUID, Fishing> fishBoosters = Fishing.getFishBoosters();
-        final Map<UUID, Mines> mineBoosts = Mines.getMineBoosts();
-        final Map<UUID, MobCoin> mobCoinBoosters = MobCoin.getMobCoinBoosters();
-        final Map<UUID, Money> moneyBoosts = Money.getMoneyBoosts();
-        final Map<UUID, Booster> boosters = new HashMap<>(xpBoost);
-        boosters.putAll(fishBoosters);
-        boosters.putAll(mineBoosts);
-        boosters.putAll(mobCoinBoosters);
-        boosters.putAll(moneyBoosts);
 
-    if(boosters.size() > 0) {
-        boosters.forEach((i, j) -> {
-            final YamlGenerator yaml = new YamlGenerator(getDataFolder() + "/Effects/" + j.getType() + "/" + i + ".yml");
-            final Map<String, Object> data = new HashMap<>();
-            data.put("name", j.getName());
-            j.getTimer().pause();
-            data.put("timer", j.getTimer().getRemainingTime());
-            yaml.getData().set("Effect", data);
-            yaml.save();
-        });
-    }
+        final Map<UUID, Map<BoostTypes, Booster>> effectBoosters = Booster.getEffectBoosters();
+        if (effectBoosters.size() > 0) {
+            effectBoosters.forEach((i, j) -> j.forEach((k, l) -> {
 
+                final YamlGenerator yaml = new YamlGenerator(getDataFolder() + "/Effects/" + l.getType() + "/" + i + ".yml");
+                final Map<String, Object> data = new HashMap<>();
+                data.put("name", l.getName());
+                l.getTimer().pause();
+                data.put("timer", l.getTimer().getRemainingTime());
+                yaml.getData().set("Effect", data);
+                yaml.save();
+
+            }));
+
+        }
     }
 }

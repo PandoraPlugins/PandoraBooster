@@ -1,6 +1,7 @@
 package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
+import me.nanigans.pandorabooster.Utility.BoostTypes;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
@@ -18,14 +19,19 @@ public class Fishing extends Booster {
 
     @Override
     public void useBooster() {
-        fishBoosters.put(player.getUniqueId(), this);
+        if(effectBoosters.get(player.getUniqueId()).containsKey(BoostTypes.FISHING)){
+            effectBoosters.get(player.getUniqueId()).get(BoostTypes.FISHING).getTimer().cancel();
+        }
+        effectBoosters.get(player.getUniqueId()).put(BoostTypes.FISHING, this);
         if(player.isOnline())
         player.getPlayer().sendMessage(ChatColor.GREEN+"Fishing booster added");
     }
 
     @Override
     public void stop() {
-        fishBoosters.remove(player.getUniqueId(), this);
+        effectBoosters.get(player.getUniqueId()).remove(BoostTypes.FISHING);
+        if(effectBoosters.get(player.getUniqueId()).isEmpty())
+            effectBoosters.remove(player.getUniqueId());
     }
 
     public static Map<UUID, Fishing> getFishBoosters() {

@@ -9,3 +9,7 @@ commands:
     usage: /givebooster <player> <boostername> <amount>
     description: Gives the player a booster item,
     aliases: [giveboost, gb, boost, boostgive]
+  currentboosters:
+    usage: /currentboosters <player>
+    description: Shows the current boosts a you or a player has
+    aliases: [cb, currentboosts, boosts, showboosts]

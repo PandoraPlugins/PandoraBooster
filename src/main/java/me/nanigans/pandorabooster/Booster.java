@@ -2,6 +2,7 @@ package me.nanigans.pandorabooster;
 
 import me.nanigans.pandorabooster.BoosterEffects.BoostEnder;
 import me.nanigans.pandorabooster.DataEnums.Items;
+import me.nanigans.pandorabooster.Utility.BoostTypes;
 import me.nanigans.pandorabooster.Utility.Glow;
 import me.nanigans.pandorabooster.Utility.ItemUtils;
 import me.nanigans.pandorabooster.Utility.JsonUtil;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONArray;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,7 +29,8 @@ public abstract class Booster {
     protected short chance;
     protected BoostEnder timer;
     protected String type;
-    protected static Map<UUID, Booster> effectBoosters;
+    protected static Map<UUID, Map<BoostTypes, Booster>> effectBoosters = new HashMap<>();
+    protected BoostTypes boostType;
 
     public Booster(OfflinePlayer player, String name, Map<String, Object> booster, BoostEnder timer){
         this.player = player;
@@ -38,6 +41,7 @@ public abstract class Booster {
         this.chance = Short.parseShort(booster.get("chance").toString());
         this.timer = timer;
         this.type = booster.get("type").toString();
+        this.boostType = BoostTypes.valueOf(this.type.toUpperCase());
     }
 
      public abstract void useBooster();
@@ -102,12 +106,16 @@ public abstract class Booster {
         return type;
     }
 
-    public static Map<UUID, Booster> getEffectBoosters() {
+    public static Map<UUID, Map<BoostTypes, Booster>> getEffectBoosters() {
         return effectBoosters;
     }
 
     public OfflinePlayer getPlayer() {
         return player;
+    }
+
+    public BoostTypes getBoostType() {
+        return boostType;
     }
 
     public long getTimeOut() {

@@ -1,6 +1,7 @@
 package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
+import me.nanigans.pandorabooster.Utility.BoostTypes;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
@@ -18,17 +19,19 @@ public class MobCoin extends Booster {
 
     @Override
     public void useBooster() {
-        if(mobCoinBoosters.containsKey(player.getUniqueId())){
-            mobCoinBoosters.get(player.getUniqueId()).getTimer().cancel();
+        if(effectBoosters.get(player.getUniqueId()).containsKey(BoostTypes.MOBCOIN)){
+            effectBoosters.get(player.getUniqueId()).get(BoostTypes.MOBCOIN).getTimer().cancel();
         }
-        mobCoinBoosters.put(player.getUniqueId(), this);
+        effectBoosters.get(player.getUniqueId()).put(BoostTypes.MOBCOIN, this);
         if(player.isOnline())
         player.getPlayer().sendMessage(ChatColor.GREEN+"MobCoin booster added");
     }
 
     @Override
     public void stop() {
-        mobCoinBoosters.remove(player.getUniqueId());
+        effectBoosters.get(player.getUniqueId()).remove(BoostTypes.MOBCOIN);
+        if(effectBoosters.get(player.getUniqueId()).isEmpty())
+            effectBoosters.remove(player.getUniqueId());
     }
 
     public static Map<UUID, MobCoin> getMobCoinBoosters() {

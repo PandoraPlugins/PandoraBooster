@@ -1,17 +1,19 @@
 package me.nanigans.pandorabooster.Commands;
 
-import me.nanigans.pandorabooster.BoosterEffects.Fishing;
-import me.nanigans.pandorabooster.BoosterEffects.Mines;
-import me.nanigans.pandorabooster.BoosterEffects.XP;
+import me.nanigans.pandorabooster.Booster;
+import me.nanigans.pandorabooster.BoosterEffects.*;
+import me.nanigans.pandorabooster.Utility.BoostTypes;
 import me.nanigans.pandorabooster.Utility.DateParser;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Date;
-import java.util.UUID;
+import java.util.Map;
 
 public class CurrentBoosters implements CommandExecutor {
     @Override
@@ -24,18 +26,19 @@ public class CurrentBoosters implements CommandExecutor {
 
             }else if(sender instanceof Player){
                 Player player = ((Player) sender);
-                final UUID uuid = player.getUniqueId();
-                StringBuilder sB = new StringBuilder("Active Boosters\n-----------");
-                if(XP.getXpBoost().containsKey(uuid)){
-                    sB.append("XP: " + DateParser.formatDateDiff(
-                            new Date().getTime() + XP.getXpBoost().get(uuid).getTimer().getRemainingTime()));
-                    sB.append("\n");
+                TextComponent sB = new TextComponent(ChatColor.RED+"---"+ChatColor.GOLD+"Active Boosters"+ChatColor.RED+"---\n");
+                if (Booster.getEffectBoosters().containsKey(player.getUniqueId())) {
+
+                    final Map<BoostTypes, Booster> boosters = Booster.getEffectBoosters().get(player.getUniqueId());
+                    boosters.forEach((i, j) -> sB.addExtra(textBuilder(i.getType() + ": " + j.getTimer().getTimeLeft(),
+                            "Amplifier: " + j.getAmp())));
+                    sB.addExtra("=============");
+                    player.spigot().sendMessage(sB);
+
+                }else{
+                    player.sendMessage(ChatColor.RED+"You do not have any active boosters");
                 }
-                if(Fishing.getFishBoosters().containsKey(uuid)){
-                    sB.append("Fishing: " + Fishing.getFishBoosters().get(uuid).getTimer().getRemainingTime()+"\n");
-                }
-                if(Mines.getMineBoosts().containsKey(uuid))
-                    //sB.append("Mining: " + )
+                return true;
             }else{
                 sender.sendMessage(ChatColor.RED+"Please specify a user");
             }
@@ -44,4 +47,13 @@ public class CurrentBoosters implements CommandExecutor {
 
         return false;
     }
+
+    public TextComponent textBuilder(String string, String hover){
+
+        TextComponent msg = new TextComponent(string);
+        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
+        return msg;
+
+    }
+
 }

@@ -1,6 +1,7 @@
 package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
+import me.nanigans.pandorabooster.Utility.BoostTypes;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
@@ -19,17 +20,18 @@ public class Mines extends Booster {
     @Override
     public void useBooster() {
         if(mineBoosts.containsKey(player.getUniqueId())){
-            mineBoosts.get(player.getUniqueId()).getTimer().cancel();
+            effectBoosters.get(player.getUniqueId()).get(BoostTypes.FISHING).getTimer().cancel();
         }
-        mineBoosts.put(player.getUniqueId(), this);
+        effectBoosters.get(player.getUniqueId()).put(BoostTypes.MINES, this);
         if(player.isOnline())
         player.getPlayer().sendMessage(ChatColor.GREEN+"Mine Boost used");
     }
 
     @Override
     public void stop() {
-        mineBoosts.remove(player.getUniqueId());
-    }
+        effectBoosters.get(player.getUniqueId()).remove(BoostTypes.MINES);
+        if(effectBoosters.get(player.getUniqueId()).isEmpty())
+            effectBoosters.remove(player.getUniqueId());    }
 
     public static Map<UUID, Mines> getMineBoosts() {
         return mineBoosts;

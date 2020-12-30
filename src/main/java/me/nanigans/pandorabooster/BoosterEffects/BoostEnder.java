@@ -1,6 +1,7 @@
 package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.util.Timer;
@@ -38,6 +39,10 @@ public class BoostEnder extends TimerTask {
         this.remainingTime = remainingTime;
     }
 
+    public long getTimeLeft(){
+        return this.endTime - System.currentTimeMillis();
+    }
+
     public long getRemainingTime() {
         return remainingTime;
     }
@@ -45,9 +50,6 @@ public class BoostEnder extends TimerTask {
     @Override
     public void run() {
         booster.stop();
-        if (booster.getPlayer().isOnline()) {
-            booster.getPlayer().getPlayer().sendMessage(ChatColor.GOLD+"Your booster: " + booster.getBoosterData() + " has ran out");
-        }
-
+        Bukkit.getPlayer(booster.getPlayer().getUniqueId()).sendMessage(ChatColor.GOLD+"Your booster: " + booster.getName() + " has ran out");
     }
 }
