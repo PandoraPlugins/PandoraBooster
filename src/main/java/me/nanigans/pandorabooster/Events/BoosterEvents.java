@@ -28,7 +28,6 @@ import java.util.Timer;
 
 public class BoosterEvents implements Listener {
 
-
     @EventHandler
     public void playerLeave(PlayerQuitEvent event){
 
