@@ -30,7 +30,7 @@ public class GiveBooster implements CommandExecutor {
 
                         final Map<String, Object> data = ((Map<String, Object>) JsonUtil.getData(null));
                         if(data != null) {
-                            final List<String> boosters = data.keySet().stream().filter(i -> !i.startsWith("_comment")).collect(Collectors.toList());
+                            final List<String> boosters = data.keySet().stream().filter(i -> !i.startsWith("_")).collect(Collectors.toList());
                             if(boosters.contains(args[1])){
 
                                 Map<String, Object> booster = ((Map<String, Object>) data.get(args[1]));

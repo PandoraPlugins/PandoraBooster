@@ -10,6 +10,7 @@ import me.nanigans.pandorabooster.Utility.NBTData;
 import me.nanigans.pandoramines.Events.OreGainEvent;
 import me.swanis.mobcoins.events.MobCoinsReceiveEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -146,6 +147,9 @@ public class BoosterEvents implements Listener {
                             Booster.getEffectBoosters().put(player.getUniqueId(), new HashMap<>());
 
                         booster1.useBooster();
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                                JsonUtil.getData("_messages.booster_activate").toString().replaceAll("\\{type}", type)
+                        .replaceAll("\\{name}", boosterName)));
                         Timer t = new Timer();
                         t.schedule(boostEnder, booster1.getTimeOut());
                         if (item.getAmount() == 1) {

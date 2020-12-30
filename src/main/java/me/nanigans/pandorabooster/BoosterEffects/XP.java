@@ -2,7 +2,6 @@ package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
 import me.nanigans.pandorabooster.Utility.BoostTypes;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
 import java.util.Map;
@@ -19,8 +18,6 @@ public class XP extends Booster {
             effectBoosters.get(player.getUniqueId()).get(BoostTypes.XP).getTimer().cancel();
         }
         effectBoosters.get(player.getUniqueId()).put(BoostTypes.XP, this);
-        if(player.isOnline())
-            player.getPlayer().sendMessage(ChatColor.GREEN+"Activated XP Booster");
     }
 
     @Override

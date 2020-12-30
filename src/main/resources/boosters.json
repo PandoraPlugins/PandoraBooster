@@ -3,6 +3,11 @@
   "_comment2": "Material can be a string of the material or material id for instance: 160/14 -> red glass pane",
   "_comment3": "Time is in milliseconds. This will be translated to a readable time in strings/messages",
   "_comment4": "Change is 0 - 100. This determines the chance that the amplifier will take effect.",
+
+  "_messages": {
+    "booster_end": "Your booster: {name} has expired of type {type}",
+    "booster_activate": "Activated {type} booster: {name}",
+  },
     "SuperPowerfulDirtXP": {
       "type": "XP",
       "amplifier": 2.0,

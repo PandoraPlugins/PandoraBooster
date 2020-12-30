@@ -1,6 +1,7 @@
 package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
+import me.nanigans.pandorabooster.Utility.JsonUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -50,6 +51,9 @@ public class BoostEnder extends TimerTask {
     @Override
     public void run() {
         booster.stop();
-        Bukkit.getPlayer(booster.getPlayer().getUniqueId()).sendMessage(ChatColor.GOLD+"Your booster: " + booster.getName() + " has ran out");
+        Bukkit.getPlayer(booster.getPlayer().getUniqueId()).sendMessage(
+                ChatColor.translateAlternateColorCodes('&', JsonUtil.getData("_messages.booster_end")
+                        .toString().replaceAll("\\{type}", booster.getType())
+                        .replaceAll("\\{name}", booster.getName())));
     }
 }

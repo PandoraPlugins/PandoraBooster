@@ -2,7 +2,6 @@ package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
 import me.nanigans.pandorabooster.Utility.BoostTypes;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
 import java.util.HashMap;
@@ -23,8 +22,6 @@ public class MobCoin extends Booster {
             effectBoosters.get(player.getUniqueId()).get(BoostTypes.MOBCOIN).getTimer().cancel();
         }
         effectBoosters.get(player.getUniqueId()).put(BoostTypes.MOBCOIN, this);
-        if(player.isOnline())
-        player.getPlayer().sendMessage(ChatColor.GREEN+"MobCoin booster added");
     }
 
     @Override

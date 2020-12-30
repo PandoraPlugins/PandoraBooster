@@ -121,8 +121,4 @@ public abstract class Booster {
     public long getTimeOut() {
         return timeOut;
     }
-
-    public Map<String, Object> getBoosterData() {
-        return boosterData;
-    }
 }

@@ -2,7 +2,6 @@ package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
 import me.nanigans.pandorabooster.Utility.BoostTypes;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
 import java.util.HashMap;
@@ -23,8 +22,6 @@ public class Fishing extends Booster {
             effectBoosters.get(player.getUniqueId()).get(BoostTypes.FISHING).getTimer().cancel();
         }
         effectBoosters.get(player.getUniqueId()).put(BoostTypes.FISHING, this);
-        if(player.isOnline())
-        player.getPlayer().sendMessage(ChatColor.GREEN+"Fishing booster added");
     }
 
     @Override

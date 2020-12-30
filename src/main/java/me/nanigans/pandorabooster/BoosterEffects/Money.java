@@ -2,7 +2,6 @@ package me.nanigans.pandorabooster.BoosterEffects;
 
 import me.nanigans.pandorabooster.Booster;
 import me.nanigans.pandorabooster.Utility.BoostTypes;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
 import java.util.HashMap;
@@ -22,8 +21,6 @@ public class Money extends Booster {
             effectBoosters.get(player.getUniqueId()).get(BoostTypes.MONEY).getTimer().cancel();
         }
         effectBoosters.get(player.getUniqueId()).put(BoostTypes.MONEY, this);
-        if(player.isOnline())
-        player.getPlayer().sendMessage(ChatColor.GREEN+"You have used a money booster");
     }
 
     @Override

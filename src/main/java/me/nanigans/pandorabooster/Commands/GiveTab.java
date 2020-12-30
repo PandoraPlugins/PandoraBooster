@@ -21,7 +21,7 @@ public class GiveTab implements TabCompleter {
                 case 2:
                     final Map<String, Object> data = (Map<String, Object>) JsonUtil.getData(null);
                     if(data != null)
-                    return data.keySet().stream().filter(i -> !i.startsWith("_comment")).collect(Collectors.toList());
+                    return data.keySet().stream().filter(i -> !i.startsWith("_")).collect(Collectors.toList());
                 case 3: return Collections.singletonList("<optional amount>");
             }
 
