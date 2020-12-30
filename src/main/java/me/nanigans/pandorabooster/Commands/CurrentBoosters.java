@@ -7,7 +7,9 @@ import me.nanigans.pandorabooster.Utility.DateParser;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,19 +24,20 @@ public class CurrentBoosters implements CommandExecutor {
         if(command.getName().equalsIgnoreCase("currentboosters")){
 
             if(sender.hasPermission("Boosters.SeeOthers") && args.length > 0){
-
-
+                final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
+                if(offlinePlayer.hasPlayedBefore()){
+                    if(Booster.getEffectBoosters().containsKey(offlinePlayer.getUniqueId())) {
+                        sender.sendMessage(ChatColor.GOLD+""+offlinePlayer.getName()+" active boosters\n");
+                        sendActiveBoosts(offlinePlayer.getPlayer());
+                    }else sender.sendMessage(ChatColor.RED+"This player has no active effects");
+                }else{
+                    sender.sendMessage(ChatColor.RED+"Could not find this player");
+                }
+                return true;
             }else if(sender instanceof Player){
                 Player player = ((Player) sender);
-                TextComponent sB = new TextComponent(ChatColor.RED+"---"+ChatColor.GOLD+"Active Boosters"+ChatColor.RED+"---\n");
                 if (Booster.getEffectBoosters().containsKey(player.getUniqueId())) {
-
-                    final Map<BoostTypes, Booster> boosters = Booster.getEffectBoosters().get(player.getUniqueId());
-                    boosters.forEach((i, j) -> sB.addExtra(textBuilder(i.getType() + ": " + j.getTimer().getTimeLeft(),
-                            "Amplifier: " + j.getAmp())));
-                    sB.addExtra("=============");
-                    player.spigot().sendMessage(sB);
-
+                    sendActiveBoosts(player);
                 }else{
                     player.sendMessage(ChatColor.RED+"You do not have any active boosters");
                 }
@@ -46,6 +49,19 @@ public class CurrentBoosters implements CommandExecutor {
         }
 
         return false;
+    }
+
+    public void sendActiveBoosts(Player player){
+        TextComponent sB = new TextComponent(ChatColor.RED+"---"+ChatColor.GOLD+"Active Boosters"+ChatColor.RED+"---\n");
+
+        final Map<BoostTypes, Booster> boosters = Booster.getEffectBoosters().get(player.getUniqueId());
+        boosters.forEach((i, j) ->
+                sB.addExtra(textBuilder(ChatColor.GOLD+i.getType() + ": "+ChatColor.RESET +
+                                DateParser.formatDateDiff(System.currentTimeMillis()+j.getTimer().getTimeLeft())+"\n",
+                        ChatColor.RED+"Amplifier: "+ChatColor.WHITE+"x"+ChatColor.GOLD + j.getAmp())));
+        sB.addExtra(ChatColor.RED+"===================");
+        player.spigot().sendMessage(sB);
+
     }
 
     public TextComponent textBuilder(String string, String hover){

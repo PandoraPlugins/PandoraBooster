@@ -13,3 +13,10 @@ commands:
     usage: /currentboosters <player>
     description: Shows the current boosts a you or a player has
     aliases: [cb, currentboosts, boosts, showboosts]
+permissions:
+  Boosters.SeeOthers:
+    description: Allows the user to see other players boosters
+    default: op
+  Boosters.GiveOut:
+    description: Allows the user to create new boosters
+    default: op
